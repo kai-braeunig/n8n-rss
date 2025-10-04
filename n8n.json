@@ -1,5 +1,5 @@
 {
-  "name": "Ethan Mollick RSS to HTTP",
+  "name": "Ethan Mollick RSS to ntfy.sh",
   "nodes": [
     {
       "parameters": {},
@@ -17,50 +17,47 @@
       "name": "RSS Feed Read",
       "type": "n8n-nodes-base.rssFeedRead",
       "typeVersion": 1,
-      "position": [460, 300]
+      "position": [460, 300],
+      "trigger": true
     },
     {
       "parameters": {
         "method": "POST",
-        "url": "https://example.com/webhook_placeholder",
+        "url": "https://ntfy.sh/my-n8n-test-feed-ax78",
         "sendBody": true,
-        "bodyParameters": {
-          "parameters": [
-            {
-              "name": "title",
-              "value": "={{ $json.title }}"
-            },
-            {
-              "name": "link",
-              "value": "={{ $json.link }}"
-            }
-          ]
+        "body": "={{ $json.title }}",
+        "options": {
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Title",
+                "value": "={{ $json.title }}"
+              },
+              {
+                "name": "Click",
+                "value": "={{ $json.link }}"
+              },
+              {
+                "name": "Tags",
+                "value": "newspaper"
+              }
+            ]
+          }
         }
       },
       "id": "http-node-id",
-      "name": "Send to Webhook",
+      "name": "Send to ntfy.sh",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.1,
       "position": [680, 300]
     }
   ],
   "connections": {
-    "Start": {
-      "main": [
-        [
-          {
-            "node": "RSS Feed Read",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "RSS Feed Read": {
       "main": [
         [
           {
-            "node": "Send to Webhook",
+            "node": "Send to ntfy.sh",
             "type": "main",
             "index": 0
           }
